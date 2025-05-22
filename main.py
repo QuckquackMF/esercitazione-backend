@@ -4,11 +4,10 @@ import json
 import random
 
 app = Flask(__name__)
-CORS(app) # Enable CORS for all routes
+CORS(app, supports_credentials=True)
 
 f = open('athletes.json') #Aprire il file json
 data = json.load(f) #caricare l'oggetto dentro data
-a = data['athletes'][random.randint(0, len(data['athletes']) - 1)] # Corrected random index
 athletes_list = data['athletes']
 
 @app.route("/")
@@ -20,8 +19,9 @@ def athletes():
     return send_file("athletes.json")
 
 @app.route("/random")
-def random():
-    return jsonify(a) # Use jsonify for JSON responses
+def random_athlete():
+    a = data['athletes'][random.randint(0, len(data['athletes']) - 1)]
+    return jsonify(a)
 
 @app.route("/cerca/<cognome>")
 def cerca(cognome):
